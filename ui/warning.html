@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠ SentinelX — Link Blocked</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 3rem;
+            text-align: center;
+        }
+        .shield {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        h1 {
+            font-size: 2rem;
+            color: #ff4444;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        .warning-box {
+            background: rgba(255, 68, 68, 0.08);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .warning-box p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        .domain {
+            display: inline-block;
+            background: rgba(255, 68, 68, 0.15);
+            color: #ff6b6b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            word-break: break-all;
+            margin: 0.5rem 0;
+        }
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+        .footer {
+            margin-top: 3rem;
+            color: #555;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="shield">🛡️</div>
+        <h1>Link Blocked</h1>
+        <p class="subtitle">SentinelX detected a potential phishing threat</p>
+
+        <div class="warning-box">
+            <p>The domain you tried to visit has been flagged as potentially dangerous:</p>
+            <div class="domain" id="blocked-domain">unknown</div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #999;">
+                This link may be attempting to steal your credentials or install malware.
+                It has been blocked to protect your security.
+            </p>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="window.history.back()">← Go Back Safely</button>
+            <button class="btn btn-secondary" onclick="window.close()">Close Tab</button>
+        </div>
+
+        <div class="footer">
+            Protected by SentinelX Phishing Interceptor
+        </div>
+    </div>
+
+    <script>
+        // Extract the original domain from the Host header
+        const host = window.location.hostname;
+        if (host && host !== '127.0.0.1' && host !== 'localhost') {
+            document.getElementById('blocked-domain').textContent = host;
+        } else {
+            // Try to get it from referrer or display generic message
+            document.getElementById('blocked-domain').textContent = 'Suspicious domain blocked';
+        }
+    </script>
+</body>
+</html>
