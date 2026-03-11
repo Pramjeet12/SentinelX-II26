@@ -63,3 +63,13 @@
 [2026-03-12 02:38:14] INFO     dns_server         | ALLOW (0.30)       api.individual.githubcopilot.com
 [2026-03-12 02:46:24] INFO     dns_server         | ALLOW (whitelist)  ctldl.windowsupdate.com
 [2026-03-12 02:47:16] INFO     dns_server         | ALLOW (whitelist)  update.code.visualstudio.com
+[2026-03-12 02:47:49] INFO     dns_server         | SCORING ...        login.live.com
+[2026-03-12 02:47:50] INFO     dns_server         | ALLOW (0.10)       login.live.com
+[2026-03-12 03:01:54] INFO     dns_server         | ALLOW (cached 0.30)  main.vscode-cdn.net
+[2026-03-12 03:01:54] INFO     dns_server         | ALLOW (cached 0.30)  main.vscode-cdn.net
+[2026-03-12 03:03:16] INFO     dns_server         | SCORING ...        avatars.githubusercontent.com
+[2026-03-12 03:03:17] INFO     dns_server         | SCORING ...        avatars.githubusercontent.com
+[2026-03-12 03:03:18] INFO     dns_server         | SCORING ...        avatars.githubusercontent.com
+[2026-03-12 03:03:19] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
+[2026-03-12 03:03:19] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
+[2026-03-12 03:03:20] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
