@@ -3,8 +3,6 @@
 import asyncio
 import json
 import socket
-import struct
-import threading
 
 import httpx
 from dnslib import DNSRecord, DNSHeader, RR, A, QTYPE
@@ -12,6 +10,7 @@ from dnslib import DNSRecord, DNSHeader, RR, A, QTYPE
 import config
 from data.whitelist import is_whitelisted
 from interceptor.cache import get_cached_score, set_cached_score, log_event, init_db
+from ui.notify import notify_block
 from utils.logger import setup_logger
 
 log = setup_logger("dns_server")
@@ -49,18 +48,21 @@ def _build_block_response(request: DNSRecord) -> bytes:
     return reply.pack()
 
 
-class DNSHandler:
-    """Handles a single DNS query."""
+class _DNSProtocol(asyncio.DatagramProtocol):
+    """asyncio UDP protocol that dispatches DNS queries to DNSHandler."""
 
-    def __init__(self, data: bytes, addr: tuple, transport: socket.socket, loop: asyncio.AbstractEventLoop):
-        self.data = data
-        self.addr = addr
+    def __init__(self):
+        self.transport: asyncio.DatagramTransport | None = None
+
+    def connection_made(self, transport: asyncio.DatagramTransport):
         self.transport = transport
-        self.loop = loop
 
-    async def handle(self):
+    def datagram_received(self, data: bytes, addr: tuple):
+        asyncio.ensure_future(self._handle(data, addr))
+
+    async def _handle(self, data: bytes, addr: tuple):
         try:
-            request = DNSRecord.parse(self.data)
+            request = DNSRecord.parse(data)
         except Exception:
             return
 
@@ -69,21 +71,21 @@ class DNSHandler:
 
         # Skip non-A queries (AAAA, MX, etc.) — just forward them
         if qtype in _SKIP_QTYPES:
-            resp = await asyncio.to_thread(_forward_dns, self.data)
-            self.transport.sendto(resp, self.addr)
+            resp = await asyncio.to_thread(_forward_dns, data)
+            self.transport.sendto(resp, addr)
             return
 
         # Skip local / internal domains
         if qname.endswith(".local") or qname == "localhost":
-            resp = await asyncio.to_thread(_forward_dns, self.data)
-            self.transport.sendto(resp, self.addr)
+            resp = await asyncio.to_thread(_forward_dns, data)
+            self.transport.sendto(resp, addr)
             return
 
         # ── Tier 1: Whitelist ──
         if is_whitelisted(qname):
             log.info(f"ALLOW (whitelist)  {qname}")
-            resp = await asyncio.to_thread(_forward_dns, self.data)
-            self.transport.sendto(resp, self.addr)
+            resp = await asyncio.to_thread(_forward_dns, data)
+            self.transport.sendto(resp, addr)
             await log_event(qname, 0.0, "allow_whitelist")
             return
 
@@ -95,12 +97,13 @@ class DNSHandler:
             if verdict == "block":
                 log.warning(f"BLOCK (cached {score:.2f})  {qname}")
                 resp = _build_block_response(request)
-                self.transport.sendto(resp, self.addr)
+                self.transport.sendto(resp, addr)
+                notify_block(qname)
                 await log_event(qname, score, "block_cached")
             else:
                 log.info(f"ALLOW (cached {score:.2f})  {qname}")
-                resp = await asyncio.to_thread(_forward_dns, self.data)
-                self.transport.sendto(resp, self.addr)
+                resp = await asyncio.to_thread(_forward_dns, data)
+                self.transport.sendto(resp, addr)
                 await log_event(qname, score, "allow_cached")
             return
 
@@ -118,62 +121,45 @@ class DNSHandler:
             if verdict == "block":
                 log.warning(f"BLOCK ({score:.2f})       {qname}  reasons={result.get('reasons', [])}")
                 resp = _build_block_response(request)
-                self.transport.sendto(resp, self.addr)
+                self.transport.sendto(resp, addr)
+                notify_block(qname, result.get('reasons', []))
                 await log_event(qname, score, "block")
             else:
                 log.info(f"ALLOW ({score:.2f})       {qname}")
-                resp = await asyncio.to_thread(_forward_dns, self.data)
-                self.transport.sendto(resp, self.addr)
+                resp = await asyncio.to_thread(_forward_dns, data)
+                self.transport.sendto(resp, addr)
                 await log_event(qname, score, "allow")
 
         except Exception as e:
             # Failsafe: if scorer is down, ALLOW the request (don't break internet)
             log.error(f"ALLOW (scorer error: {e})  {qname}")
-            resp = await asyncio.to_thread(_forward_dns, self.data)
-            self.transport.sendto(resp, self.addr)
+            resp = await asyncio.to_thread(_forward_dns, data)
+            self.transport.sendto(resp, addr)
             await log_event(qname, None, "allow_error")
 
 
 class AsyncDNSServer:
-    """UDP DNS server running in an asyncio event loop."""
+    """UDP DNS server using asyncio's native datagram protocol."""
 
     def __init__(self, host: str = config.DNS_LISTEN_HOST, port: int = config.DNS_LISTEN_PORT):
         self.host = host
         self.port = port
-        self._sock: socket.socket | None = None
-        self._running = False
+        self._transport: asyncio.DatagramTransport | None = None
+        self._protocol: _DNSProtocol | None = None
 
     async def start(self):
         await init_db()
-        self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self._sock.bind((self.host, self.port))
-        self._sock.setblocking(False)
-        self._running = True
-        log.info(f"DNS server listening on {self.host}:{self.port}")
-
         loop = asyncio.get_event_loop()
-        while self._running:
-            try:
-                data, addr = await asyncio.to_thread(self._recv)
-                if data:
-                    handler = DNSHandler(data, addr, self._sock, loop)
-                    asyncio.create_task(handler.handle())
-            except OSError:
-                if self._running:
-                    raise
-                break
-
-    def _recv(self) -> tuple[bytes | None, tuple | None]:
-        import select
-        ready, _, _ = select.select([self._sock], [], [], 0.5)
-        if ready:
-            return self._sock.recvfrom(4096)
-        return None, None
+        self._transport, self._protocol = await loop.create_datagram_endpoint(
+            _DNSProtocol, local_addr=(self.host, self.port)
+        )
+        log.info(f"DNS server listening on {self.host}:{self.port}")
+        # Keep running until stopped
+        while self._transport is not None and not self._transport.is_closing():
+            await asyncio.sleep(1)
 
     def stop(self):
-        self._running = False
-        if self._sock:
-            self._sock.close()
-            self._sock = None
+        if self._transport:
+            self._transport.close()
+            self._transport = None
         log.info("DNS server stopped")

@@ -1,4 +1,8 @@
-"""Local HTTP server that serves the block/warning page."""
+"""Local HTTP server that serves the block/warning page.
+
+Listens on port 80 so blocked domains (DNS → 127.0.0.1) show the warning
+instead of a browser connection error.
+"""
 
 import asyncio
 from pathlib import Path
@@ -12,17 +16,28 @@ WARNING_HTML = (Path(__file__).parent / "warning.html").read_text(encoding="utf-
 
 
 async def handle_request(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-    """Handle an incoming HTTP request — always serve the block page."""
+    """Handle an incoming HTTP request — extract Host header and serve block page."""
     try:
         # Read the request line
         request_line = await asyncio.wait_for(reader.readline(), timeout=5.0)
-        # Drain remaining headers
+
+        # Read headers to extract Host (the blocked domain)
+        host_domain = "suspicious domain"
         while True:
             line = await asyncio.wait_for(reader.readline(), timeout=5.0)
             if line in (b"\r\n", b"\n", b""):
                 break
+            header = line.decode("utf-8", errors="ignore").strip()
+            if header.lower().startswith("host:"):
+                host_domain = header.split(":", 1)[1].strip()
 
-        body = WARNING_HTML.encode("utf-8")
+        # Inject the blocked domain into the HTML
+        html = WARNING_HTML.replace(
+            "document.getElementById('blocked-domain').textContent = 'Suspicious domain blocked';",
+            f"document.getElementById('blocked-domain').textContent = '{host_domain}';",
+        )
+
+        body = html.encode("utf-8")
         response = (
             f"HTTP/1.1 200 OK\r\n"
             f"Content-Type: text/html; charset=utf-8\r\n"

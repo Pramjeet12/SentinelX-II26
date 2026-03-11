@@ -1,0 +1,65 @@
+[2026-03-12 01:57:44] INFO     notify             | Toast sent for: paypa1-secure-login.xyz
+[2026-03-12 02:07:13] INFO     main               | ==================================================
+[2026-03-12 02:07:13] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 02:07:13] INFO     main               | ==================================================
+[2026-03-12 02:07:13] WARNING  main               | Admin privileges required to change DNS settings.
+[2026-03-12 02:07:13] WARNING  dns_config         | Requesting admin privileges (UAC prompt)...
+[2026-03-12 02:07:17] INFO     main               | ==================================================
+[2026-03-12 02:07:17] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 02:07:17] INFO     main               | ==================================================
+[2026-03-12 02:07:17] INFO     main               | Starting scorer API on 127.0.0.1:8000...
+[2026-03-12 02:07:17] INFO     main               | Redirecting Windows DNS to local server...
+[2026-03-12 02:07:18] INFO     dns_config         | Interface: Wi-Fi
+[2026-03-12 02:07:18] INFO     dns_config         | Original DNS: ['127.0.0.1']
+[2026-03-12 02:07:18] INFO     dns_config         | DNS redirected to 127.0.0.1 ✓
+[2026-03-12 02:07:18] INFO     main               | System tray icon active
+[2026-03-12 02:07:18] INFO     main               | Starting DNS interceptor & block page server...
+[2026-03-12 02:07:18] INFO     main               | SentinelX is ACTIVE — all DNS queries are now being intercepted
+[2026-03-12 02:07:18] INFO     main               | --------------------------------------------------
+[2026-03-12 02:07:18] INFO     block_page         | Block page server on http://127.0.0.1:80
+[2026-03-12 02:07:18] INFO     dns_server         | DNS server listening on 127.0.0.1:53
+[2026-03-12 02:10:50] WARNING  dns_server         | BLOCK (cached 0.80)  paypa1-secure-login.xyz
+[2026-03-12 02:10:50] WARNING  dns_server         | BLOCK (cached 0.80)  paypa1-secure-login.xyz
+[2026-03-12 02:10:50] INFO     notify             | Toast sent for: paypa1-secure-login.xyz
+[2026-03-12 02:10:50] INFO     notify             | Toast sent for: paypa1-secure-login.xyz
+[2026-03-12 02:17:58] DEBUG    notify             | notify_block called: domain=test-phish.xyz, reasons=['Lookalike domain']
+[2026-03-12 02:17:58] DEBUG    notify             | Launching PowerShell balloon for: test-phish.xyz
+[2026-03-12 02:18:06] INFO     notify             | Toast SUCCESS for: test-phish.xyz
+[2026-03-12 02:28:18] INFO     main               | ==================================================
+[2026-03-12 02:28:18] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 02:28:18] INFO     main               | ==================================================
+[2026-03-12 02:28:18] WARNING  main               | Admin privileges required to change DNS settings.
+[2026-03-12 02:28:18] WARNING  dns_config         | Requesting admin privileges (UAC prompt)...
+[2026-03-12 02:28:26] INFO     main               | ==================================================
+[2026-03-12 02:28:26] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 02:28:26] INFO     main               | ==================================================
+[2026-03-12 02:28:26] INFO     main               | Starting scorer API on 127.0.0.1:8000...
+[2026-03-12 02:28:26] INFO     main               | Redirecting Windows DNS to local server...
+[2026-03-12 02:28:27] INFO     dns_config         | Interface: Wi-Fi
+[2026-03-12 02:28:27] INFO     dns_config         | Original DNS: ['127.0.0.1']
+[2026-03-12 02:28:27] INFO     dns_config         | DNS redirected to 127.0.0.1 ✓
+[2026-03-12 02:28:27] INFO     main               | System tray icon active
+[2026-03-12 02:28:27] INFO     main               | Starting DNS interceptor & block page server...
+[2026-03-12 02:28:27] INFO     main               | SentinelX is ACTIVE — all DNS queries are now being intercepted
+[2026-03-12 02:28:27] INFO     main               | --------------------------------------------------
+[2026-03-12 02:28:27] INFO     block_page         | Block page server on http://127.0.0.1:80
+[2026-03-12 02:28:27] INFO     dns_server         | DNS server listening on 127.0.0.1:53
+[2026-03-12 02:32:53] INFO     dns_server         | ALLOW (cached 0.70)  google.com.mshome.net
+[2026-03-12 02:32:53] INFO     dns_server         | ALLOW (whitelist)  google.com
+[2026-03-12 02:33:00] WARNING  dns_server         | BLOCK (cached 0.80)  arnazon-security.ml.mshome.net
+[2026-03-12 02:33:00] DEBUG    notify             | notify_block called: domain=arnazon-security.ml.mshome.net, reasons=None
+[2026-03-12 02:33:00] DEBUG    notify             | Launching PowerShell balloon for: arnazon-security.ml.mshome.net
+[2026-03-12 02:33:09] INFO     notify             | Toast SUCCESS for: arnazon-security.ml.mshome.net
+[2026-03-12 02:35:52] INFO     dns_server         | ALLOW (whitelist)  licensing.mp.microsoft.com
+[2026-03-12 02:35:55] INFO     dns_server         | ALLOW (whitelist)  1D.tlu.dl.delivery.mp.microsoft.com
+[2026-03-12 02:37:08] INFO     dns_server         | ALLOW (cached 0.30)  main.vscode-cdn.net
+[2026-03-12 02:37:51] INFO     dns_server         | ALLOW (whitelist)  mobile.events.data.microsoft.com
+[2026-03-12 02:37:51] INFO     dns_server         | ALLOW (whitelist)  mobile.events.data.microsoft.com
+[2026-03-12 02:38:11] INFO     dns_server         | SCORING ...        api.individual.githubcopilot.com
+[2026-03-12 02:38:11] INFO     dns_server         | SCORING ...        api.individual.githubcopilot.com
+[2026-03-12 02:38:12] INFO     dns_server         | SCORING ...        api.individual.githubcopilot.com
+[2026-03-12 02:38:14] INFO     dns_server         | ALLOW (0.30)       api.individual.githubcopilot.com
+[2026-03-12 02:38:14] INFO     dns_server         | ALLOW (0.30)       api.individual.githubcopilot.com
+[2026-03-12 02:38:14] INFO     dns_server         | ALLOW (0.30)       api.individual.githubcopilot.com
+[2026-03-12 02:46:24] INFO     dns_server         | ALLOW (whitelist)  ctldl.windowsupdate.com
+[2026-03-12 02:47:16] INFO     dns_server         | ALLOW (whitelist)  update.code.visualstudio.com

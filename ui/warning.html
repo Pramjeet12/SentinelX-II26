@@ -121,13 +121,16 @@
     </div>
 
     <script>
-        // Extract the original domain from the Host header
-        const host = window.location.hostname;
-        if (host && host !== '127.0.0.1' && host !== 'localhost') {
-            document.getElementById('blocked-domain').textContent = host;
-        } else {
-            // Try to get it from referrer or display generic message
-            document.getElementById('blocked-domain').textContent = 'Suspicious domain blocked';
+        // Domain is injected server-side via Host header.
+        // Fallback: try extracting from browser location.
+        const el = document.getElementById('blocked-domain');
+        if (el.textContent === 'unknown') {
+            const host = window.location.hostname;
+            if (host && host !== '127.0.0.1' && host !== 'localhost') {
+                el.textContent = host;
+            } else {
+                el.textContent = 'Suspicious domain blocked';
+            }
         }
     </script>
 </body>

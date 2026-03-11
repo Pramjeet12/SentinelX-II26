@@ -32,7 +32,7 @@ SCORER_PORT = 8000
 
 # ── Block Page Server ──
 BLOCK_PAGE_HOST = "127.0.0.1"
-BLOCK_PAGE_PORT = 8080
+BLOCK_PAGE_PORT = 80  # Must be 80 — browsers default to port 80 for HTTP
 
 # ── Cache TTL ──
 CACHE_TTL_SECONDS = 86400  # 24 hours — re-score after this
