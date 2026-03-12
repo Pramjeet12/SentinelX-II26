@@ -5,6 +5,7 @@ instead of a browser connection error.
 """
 
 import asyncio
+import re
 from pathlib import Path
 
 from utils.logger import setup_logger
@@ -13,6 +14,9 @@ import config
 log = setup_logger("block_page")
 
 WARNING_HTML = (Path(__file__).parent / "warning.html").read_text(encoding="utf-8")
+
+# Only allow valid domain characters (letters, digits, dots, hyphens)
+_SAFE_DOMAIN_RE = re.compile(r'^[a-zA-Z0-9._-]+$')
 
 
 async def handle_request(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -30,6 +34,10 @@ async def handle_request(reader: asyncio.StreamReader, writer: asyncio.StreamWri
             header = line.decode("utf-8", errors="ignore").strip()
             if header.lower().startswith("host:"):
                 host_domain = header.split(":", 1)[1].strip()
+
+        # Sanitize the domain — only allow valid domain characters to prevent XSS
+        if not _SAFE_DOMAIN_RE.match(host_domain):
+            host_domain = "suspicious domain"
 
         # Inject the blocked domain into the HTML
         html = WARNING_HTML.replace(

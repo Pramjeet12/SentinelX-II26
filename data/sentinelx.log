@@ -73,3 +73,11 @@
 [2026-03-12 03:03:19] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
 [2026-03-12 03:03:19] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
 [2026-03-12 03:03:20] INFO     dns_server         | ALLOW (0.00)       avatars.githubusercontent.com
+[2026-03-12 03:05:32] INFO     dns_server         | ALLOW (whitelist)  ssl.gstatic.com
+[2026-03-12 03:07:21] INFO     dns_server         | ALLOW (whitelist)  github.com
+[2026-03-12 03:10:42] INFO     dns_server         | ALLOW (whitelist)  ssl.gstatic.com
+[2026-03-12 03:12:30] INFO     dns_server         | ALLOW (cached 0.30)  telemetry.individual.githubcopilot.com
+[2026-03-12 03:12:31] INFO     dns_server         | ALLOW (cached 0.30)  telemetry.individual.githubcopilot.com
+[2026-03-12 03:12:33] INFO     dns_server         | ALLOW (cached 0.30)  api.individual.githubcopilot.com
+[2026-03-12 03:12:33] INFO     dns_server         | ALLOW (cached 0.30)  telemetry.individual.githubcopilot.com
+[2026-03-12 03:14:47] INFO     dns_server         | ALLOW (whitelist)  chat.openai.com
