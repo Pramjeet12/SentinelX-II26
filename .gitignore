@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 .env
 data/sentinelx.db
+prototype/
+credprototype/

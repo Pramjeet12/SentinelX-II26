@@ -81,3 +81,30 @@
 [2026-03-12 03:12:33] INFO     dns_server         | ALLOW (cached 0.30)  api.individual.githubcopilot.com
 [2026-03-12 03:12:33] INFO     dns_server         | ALLOW (cached 0.30)  telemetry.individual.githubcopilot.com
 [2026-03-12 03:14:47] INFO     dns_server         | ALLOW (whitelist)  chat.openai.com
+[2026-03-12 23:31:18] INFO     main               | ==================================================
+[2026-03-12 23:31:18] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 23:31:18] INFO     main               | ==================================================
+[2026-03-12 23:31:18] WARNING  main               | Admin privileges required to change DNS settings.
+[2026-03-12 23:31:18] WARNING  dns_config         | Requesting admin privileges (UAC prompt)...
+[2026-03-12 23:31:22] INFO     main               | ==================================================
+[2026-03-12 23:31:22] INFO     main               |   SentinelX — Phishing Link Interceptor
+[2026-03-12 23:31:22] INFO     main               | ==================================================
+[2026-03-12 23:31:22] INFO     main               | Starting scorer API on 127.0.0.1:8000...
+[2026-03-12 23:31:22] INFO     main               | Redirecting Windows DNS to local server...
+[2026-03-12 23:31:22] INFO     dns_config         | Interface: Ethernet
+[2026-03-12 23:31:22] INFO     dns_config         | Original DNS: ['8.8.8.8', '8.8.4.4']
+[2026-03-12 23:31:22] INFO     dns_config         | DNS redirected to 127.0.0.1 ✓
+[2026-03-12 23:31:22] INFO     main               | System tray icon active
+[2026-03-12 23:31:22] INFO     main               | Starting DNS interceptor & block page server...
+[2026-03-12 23:31:22] INFO     main               | SentinelX is ACTIVE — all DNS queries are now being intercepted
+[2026-03-12 23:31:22] INFO     main               | --------------------------------------------------
+[2026-03-12 23:31:22] INFO     block_page         | Block page server on http://127.0.0.1:80
+[2026-03-12 23:31:22] INFO     dns_server         | DNS server listening on 127.0.0.1:53
+[2026-03-12 23:41:20] INFO     dns_server         | ALLOW (whitelist)  github.com
+[2026-03-12 23:42:46] INFO     dns_server         | ALLOW (cached 0.10)  catalog.gamepass.com
+[2026-03-12 23:44:28] INFO     dns_server         | SCORING ...        wpad.mshome.net
+[2026-03-12 23:44:32] WARNING  dns_server         | BLOCK (score timeout >4.0s)  wpad.mshome.net
+[2026-03-12 23:44:32] DEBUG    notify             | notify_block called: domain=wpad.mshome.net, reasons=['Scoring timeout — blocked as precaution']
+[2026-03-12 23:44:32] DEBUG    notify             | Launching PowerShell balloon for: wpad.mshome.net
+[2026-03-12 23:44:35] INFO     dns_server         | Background score done: wpad.mshome.net → allow (0.30)
+[2026-03-12 23:44:39] INFO     notify             | Toast SUCCESS for: wpad.mshome.net
